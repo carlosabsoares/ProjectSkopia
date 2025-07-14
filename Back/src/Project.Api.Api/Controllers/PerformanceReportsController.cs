@@ -1,9 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Project.Api.Application.Commands.AppProject;
 using Project.Api.Application.Commands.AppReports;
-using Project.Api.Application.Commands.AppTask;
 
 namespace Project.Api.Api.Controllers
 {
@@ -17,9 +14,6 @@ namespace Project.Api.Api.Controllers
         {
             _mediator = mediator;
         }
-
-
-
 
         [HttpGet()]
         [ProducesResponseType(typeof(bool), 200)]

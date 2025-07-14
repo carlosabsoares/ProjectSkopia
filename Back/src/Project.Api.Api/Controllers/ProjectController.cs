@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Api.Application.Commands.AppProject;
 
@@ -22,7 +21,6 @@ namespace Project.Api.Api.Controllers
             [FromBody] CreateProjectCommand command
         )
         {
-
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -31,7 +29,6 @@ namespace Project.Api.Api.Controllers
             }
             return new OkObjectResult(result.Data);
         }
-
 
         [HttpGet("getAll")]
         [ProducesResponseType(typeof(bool), 200)]

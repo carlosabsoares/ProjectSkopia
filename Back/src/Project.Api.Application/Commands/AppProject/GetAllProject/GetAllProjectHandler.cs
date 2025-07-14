@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Flunt.Notifications;
-using Microsoft.AspNetCore.Mvc;
-using Project.Api.Application.Commands.AppProject;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Domain.Dto;
-using Project.Api.Domain.Entities;
 using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppProject

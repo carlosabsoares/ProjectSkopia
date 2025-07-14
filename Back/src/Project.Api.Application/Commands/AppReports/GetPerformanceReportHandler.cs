@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Flunt.Notifications;
-using Microsoft.AspNetCore.Mvc;
-using Project.Api.Application.Commands.AppProject;
+﻿using Flunt.Notifications;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Domain.Dto;
-using Project.Api.Domain.Entities;
 using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppReports
@@ -15,7 +11,7 @@ namespace Project.Api.Application.Commands.AppReports
         private readonly ITaskRepository _taskRepository;
         private readonly IUserRepository _userRepository;
 
-        public GetPerformanceReportHandler(ITaskRepository taskRepository, 
+        public GetPerformanceReportHandler(ITaskRepository taskRepository,
                                            IUserRepository userRepository)
         {
             _taskRepository = taskRepository;
@@ -26,7 +22,7 @@ namespace Project.Api.Application.Commands.AppReports
         {
             try
             {
-                var days = 30; 
+                var days = 30;
 
                 var baseEntity = await _taskRepository.GetPerformanceReport(days);
 

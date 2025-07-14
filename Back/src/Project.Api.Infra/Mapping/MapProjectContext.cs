@@ -29,7 +29,6 @@ namespace Project.Api.Infra.Mapping
                 .WithOne(x => x.Project)
                 .HasForeignKey(x => x.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }

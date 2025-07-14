@@ -2,7 +2,7 @@
 
 namespace Project.Api.Domain.Dto
 {
-    public class UserDto 
+    public class UserDto
     {
         public Guid Uuid { get; init; }
         public DateTime CreateAt { get; set; } = DateTime.Now;

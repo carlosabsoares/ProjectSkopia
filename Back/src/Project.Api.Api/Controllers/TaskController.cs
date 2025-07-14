@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Api.Application.Commands.AppProject;
 using Project.Api.Application.Commands.AppTask;
@@ -23,7 +22,6 @@ namespace Project.Api.Api.Controllers
             [FromBody] CreateTaskCommand command
         )
         {
-
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -32,7 +30,6 @@ namespace Project.Api.Api.Controllers
             }
             return new OkObjectResult(result.Data);
         }
-
 
         [HttpGet("getAll")]
         [ProducesResponseType(typeof(bool), 200)]
@@ -54,7 +51,6 @@ namespace Project.Api.Api.Controllers
         public async Task<IActionResult> UpdateCategory(
         [FromBody] UpdateTaskCommand command)
         {
-
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -63,7 +59,6 @@ namespace Project.Api.Api.Controllers
             }
             return new OkObjectResult(result.Data);
         }
-
 
         [HttpDelete()]
         [ProducesResponseType(typeof(bool), 200)]

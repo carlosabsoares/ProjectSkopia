@@ -9,6 +9,7 @@ namespace Project.Api.Domain.Entities
         [MaxLength(100)]
         [MinLength(3)]
         public string Name { get; set; } = string.Empty;
+
         public RoleUserType Role { get; set; } = RoleUserType.User;
         public bool IsActive { get; set; } = true;
     }

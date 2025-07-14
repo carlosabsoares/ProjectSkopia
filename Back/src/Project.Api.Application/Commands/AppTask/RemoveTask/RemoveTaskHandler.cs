@@ -1,7 +1,5 @@
 ﻿using Flunt.Notifications;
-using Microsoft.AspNetCore.Mvc;
 using Project.Api.Application.Commands.AppProject;
-using Project.Api.Application.Configuration.Commands;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Domain.Entities;
@@ -15,7 +13,6 @@ namespace Project.Api.Application.Commands.AppTask
         private readonly ITaskAuditRepository _taskAuditRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
-
 
         public RemoveTaskHandler(
                 ITaskRepository taskRepository,
@@ -56,7 +53,6 @@ namespace Project.Api.Application.Commands.AppTask
 
             try
             {
-
                 bool result = false;
 
                 await _taskRepository.BeginTransactionAsync();
@@ -77,7 +73,6 @@ namespace Project.Api.Application.Commands.AppTask
 
                 await _taskAuditRepository.Add(taskAuditEntity);
 
-
                 task.Status = Domain.Enum.StatusTaskType.Removed;
 
                 await _taskRepository.Update(task);
@@ -85,15 +80,11 @@ namespace Project.Api.Application.Commands.AppTask
                 await _taskRepository.CommitTransactionAsync();
 
                 return new ResultEvent(true, result ? result : null);
-
             }
             catch (Exception ex)
             {
                 return new ResultEvent(false, ex.Message);
             }
-
-
-
         }
     }
 }

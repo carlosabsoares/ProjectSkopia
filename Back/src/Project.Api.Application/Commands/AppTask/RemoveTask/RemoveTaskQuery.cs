@@ -1,8 +1,6 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using Project.Api.Application.Configuration.Commands;
 using Project.Api.Application.Configuration.Queries;
-using Project.Api.Domain.Enum;
 using Project.Api.Shared.Extension;
 
 namespace Project.Api.Application.Commands.AppProject

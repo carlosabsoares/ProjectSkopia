@@ -1,6 +1,5 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using Project.Api.Application.Configuration.Commands;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Shared.Extension;
 

@@ -17,7 +17,7 @@ namespace Project.Api.Application.Commands.AppProject
                 .IsNotNull(AuthorUuid, "AuthorUuid", "Author UUID is required")
                 .IsNotNullOrEmpty(AuthorUuid.ToString(), "AuthorUuid", "Author UUID cannot be empty")
                 .IsTrue(AuthorUuid.ToString().IsGuid(), "AuthorUuid", "Author UUID must be a valid GUID")
-                .IsNotNullOrEmpty(Description,"Description", "Description cannot be empty")
+                .IsNotNullOrEmpty(Description, "Description", "Description cannot be empty")
                 .HasMinLen(Description, 3, "Description", "Description must be at least 3 characters long")
                 .HasMaxLen(Description, 500, "Description", "Description must not exceed 100 characters")
             );

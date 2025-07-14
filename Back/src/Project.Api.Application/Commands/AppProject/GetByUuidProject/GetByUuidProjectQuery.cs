@@ -19,5 +19,4 @@ namespace Project.Api.Application.Commands.AppProject
             );
         }
     }
-    
 }

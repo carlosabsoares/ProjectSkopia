@@ -24,13 +24,11 @@ namespace Project.Api.Domain.Entities
 
         public long EditorId { get; set; }
 
-
         public DateTime Date { get; set; }
 
         public long TaskId { get; set; }
         public virtual TaskEntity Task { get; set; } = null!;
         public virtual UserEntity Author { get; set; } = null!;
         public virtual ProjectEntity Project { get; set; }
-
     }
 }

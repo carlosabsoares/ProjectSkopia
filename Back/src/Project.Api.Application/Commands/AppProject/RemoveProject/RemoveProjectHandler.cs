@@ -1,8 +1,6 @@
 ﻿using Flunt.Notifications;
-using Project.Api.Application.Configuration.Commands;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
-using Project.Api.Domain.Entities;
 using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppProject
@@ -29,7 +27,7 @@ namespace Project.Api.Application.Commands.AppProject
             if (projet == null)
                 return new ResultEvent(false, "Project not found or not active");
 
-            if(projet.Tasks.Any(x => x.Status != Domain.Enum.StatusTaskType.Completed))
+            if (projet.Tasks.Any(x => x.Status != Domain.Enum.StatusTaskType.Completed))
                 return new ResultEvent(false, "Project has active tasks, cannot remove.");
 
             bool result = false;
@@ -44,7 +42,7 @@ namespace Project.Api.Application.Commands.AppProject
             }
             catch (Exception ex)
             {
-                return new ResultEvent(false,ex.Message);
+                return new ResultEvent(false, ex.Message);
             }
         }
     }

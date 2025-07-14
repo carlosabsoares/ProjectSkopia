@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Flunt.Notifications;
-using Microsoft.AspNetCore.Mvc;
-using Project.Api.Application.Commands.AppProject;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Domain.Dto;
-using Project.Api.Domain.Entities;
 using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppProject
@@ -23,11 +20,9 @@ namespace Project.Api.Application.Commands.AppProject
 
         public async Task<IEvent> Handle(GetByUuidProjectQuery request, CancellationToken cancellationToken)
         {
-
             request.Validate();
             if (request.Invalid)
                 return new ResultEvent(false, request.Notifications);
-
 
             try
             {

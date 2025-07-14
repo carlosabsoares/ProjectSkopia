@@ -14,7 +14,6 @@ namespace Project.Api.Application.Commands.AppTask
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
 
-
         public CreateTaskHandler(
                 ITaskRepository taskRepository,
                 ITaskAuditRepository taskAuditRepository,
@@ -44,7 +43,7 @@ namespace Project.Api.Application.Commands.AppTask
             if (project == null)
                 return new ResultEvent(false, "Project not found or not active");
 
-            if(project.Tasks.Count() > 20)
+            if (project.Tasks.Count() > 20)
                 return new ResultEvent(false, "Project already has 20 tasks, cannot create more.");
 
             try
@@ -67,12 +66,9 @@ namespace Project.Api.Application.Commands.AppTask
                     return new ResultEvent(false, "Failed to create task");
 
                 return new ResultEvent(true, result ? result : null);
-
-
             }
             catch (Exception ex)
             {
-
                 return new ResultEvent(false, ex.Message);
             }
         }

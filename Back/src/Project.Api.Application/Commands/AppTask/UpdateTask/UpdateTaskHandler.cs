@@ -14,7 +14,6 @@ namespace Project.Api.Application.Commands.AppTask
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
 
-
         public UpdateTaskHandler(
                 ITaskRepository taskRepository,
                 ITaskAuditRepository taskAuditRepository,
@@ -49,7 +48,7 @@ namespace Project.Api.Application.Commands.AppTask
             if (project == null)
                 return new ResultEvent(false, "Project not found or not active");
 
-            if(project.Tasks.Count() > 20)
+            if (project.Tasks.Count() > 20)
                 return new ResultEvent(false, "Project already has 20 tasks, cannot create more.");
 
             try
@@ -57,7 +56,6 @@ namespace Project.Api.Application.Commands.AppTask
                 bool result = false;
 
                 await _taskRepository.BeginTransactionAsync();
-
 
                 var taskAuditEntity = new TaskAuditEntity()
                 {
@@ -78,8 +76,8 @@ namespace Project.Api.Application.Commands.AppTask
                 if (!result)
                     return new ResultEvent(false, "Failed to create task audit");
 
-                task.Title  = request?.Title == null  ? task.Title: request.Title;
-                task.Description = request?.Description == null ? task.Description: request.Description;
+                task.Title = request?.Title == null ? task.Title : request.Title;
+                task.Description = request?.Description == null ? task.Description : request.Description;
                 task.ExpirationDate = request?.ExpirationDate == null ? task.ExpirationDate : request.ExpirationDate;
                 task.Status = request?.Status == null ? request.Status : task.Status;
 
@@ -87,10 +85,7 @@ namespace Project.Api.Application.Commands.AppTask
 
                 await _taskRepository.CommitTransactionAsync();
 
-
                 return new ResultEvent(true, result ? result : null);
-
-
             }
             catch (Exception ex)
             {
