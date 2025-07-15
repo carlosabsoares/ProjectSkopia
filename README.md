@@ -46,6 +46,7 @@ Refinamento:
  	* Devemos utilizar JWT para validação da permissão de utilização das API's?
 	
 Final:
+
     Visando a manutenção de rastreabilidade do sistema, as deleções não são "físicas" e sim "lógicas", permitindo gerar relatórios mais completos para entendimento da evolução das informações.
 	
 	* Se a volumetria de usuários for um número considerável, alterar o banco de dados para um banco mais potente, como Oracle ,Microsoft SQL Server ou Postgre. Possivel implementação de microserviços para podermos ganhar escalabilidade em volume de consumo da api e estrutura já preparada para a inclusão de um banco não relacional para a recuperação das informações de tasks pendentes para que a carga das telas de visualizações sejam mais rápidas ( possivel uso de MongoDB )
