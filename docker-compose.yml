@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  project-api:
+    build:
+      context: .
+      dockerfile: Back/src/Project.Api.Api/Dockerfile
+    container_name: project-api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ./Back/src/Project.Api.Api/Project.db:/app/Project.db
+      - ./Back/src/Project.Api.Api/Project.db-shm:/app/Project.db-shm
+      - ./Back/src/Project.Api.Api/Project.db-wal:/app/Project.db-wal
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: always
