@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿using BlazorBootstrap.Extensions;
+using Moq;
 using Project.Api.Application.Commands.AppProject;
 using Project.Api.Application.Commands.AppReports;
 using Project.Api.Application.Commands.AppTask;
+using Project.Api.Domain.Dto;
 using Project.Api.Domain.Entities;
 using Project.Api.Domain.Enum;
 using Project.Api.Domain.Repositories;
@@ -72,9 +74,6 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
         }
 
 
-
-
-
         [Fact]
         public async Task Handle_ValidPerformanceReports_ShouldBeValid()
         {
@@ -86,6 +85,11 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.True(result.Success);
+            var data = (List<PerformanceReportsDto>)result.Data;
+
+            Assert.Equal(1, data[0].UserId);
+            Assert.Equal(1, data[0].NumberTasksCompleted);
+            Assert.Equal("Name", data[0].UserName);
 
             _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
             _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Once);
@@ -102,6 +106,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Equal("User does not have permission to access this report.", result.Data);
 
             _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
             _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Never);
@@ -119,6 +124,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Equal("User not found.", result.Data);
 
             _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
             _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Never);
@@ -133,7 +139,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync((List<TaskEntity>)null);
 
             var result = await _handler.Handle(command, CancellationToken.None);
-
+            
             Assert.True(result.Success);
 
             _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
@@ -141,5 +147,22 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Once);
         }
 
+        [Fact]
+        public async Task Handle_ErrorPerformanceReports_ShouldBeException()
+        {
+            _userRepositoryMock.Setup(r => r.GetByIds(It.IsAny<List<long>>())).ThrowsAsync(new Exception("Error"));
+            _userRepositoryMock.Setup(r => r.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(user.First);
+            _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync(tasks);
+
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            Assert.False(result.Success);
+            Assert.Equal("Error", result.Data);
+
+
+            _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
+            _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Once);
+            _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Once);
+        }
     }
 }

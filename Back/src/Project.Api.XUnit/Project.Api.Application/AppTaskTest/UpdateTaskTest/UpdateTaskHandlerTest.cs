@@ -34,7 +34,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             CreateAt = DateTime.Now.Date,
             IsActive = true,
             Name = "Name",
-            Role = Domain.Enum.RoleUserType.Manager,
+            Role = RoleUserType.Manager,
             Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
         };
 

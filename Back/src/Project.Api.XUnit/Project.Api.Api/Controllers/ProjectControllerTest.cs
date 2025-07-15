@@ -111,7 +111,7 @@ namespace Project.Api.XUnit.Project.Api.Api.Controllers
                 {
                     CreateAt = DateTime.Now.Date,
                     IsActive = true,
-                    Role = Domain.Enum.RoleUserType.Manager,
+                    Role = RoleUserType.Manager,
                     Name = "Test User",
                     Uuid = Guid.Parse("76ddd3c0-89ae-41ad-be8c-2828d2736ed0")
                 },

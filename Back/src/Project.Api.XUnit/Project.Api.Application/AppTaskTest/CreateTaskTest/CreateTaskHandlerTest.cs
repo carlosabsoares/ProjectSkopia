@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Project.Api.Application.Commands.AppProject;
 using Project.Api.Domain.Entities;
+using Project.Api.Domain.Enum;
 using Project.Api.Domain.Repositories;
 using Xunit;
 
@@ -31,7 +32,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             CreateAt = DateTime.Now.Date,
             IsActive = true,
             Name = "Name",
-            Role = Domain.Enum.RoleUserType.Manager,
+            Role = RoleUserType.Manager,
             Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
         };
 
@@ -46,6 +47,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.True(result.Success);
+            Assert.True((bool)result.Data);
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);
@@ -55,13 +57,13 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
         public async Task Handle_ValidCreation_ShouldBeInvalid_UserNotFound()
         {
 
-
             _userRepositoryMock.Setup(r => r.GetByUuid(command.AuthorUuid)).ReturnsAsync((UserEntity)null);
             _projectRepositoryMock.Setup(r => r.Add(It.IsAny<ProjectEntity>())).ReturnsAsync(true);
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Equal("User not found or not active", result.Data);
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Never);
@@ -78,9 +80,28 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Equal(null, result.Data);
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);
         }
+
+
+        [Fact]
+        public async Task Handle_InvalidCreation_ShouldBeException()
+        {
+
+            _userRepositoryMock.Setup(r => r.GetByUuid(command.AuthorUuid)).ReturnsAsync(user);
+            _projectRepositoryMock.Setup(r => r.Add(It.IsAny<ProjectEntity>())).ThrowsAsync(new Exception("Error"));
+
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            Assert.False(result.Success);
+            Assert.Equal("Error",result.Data);
+
+            _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
+            _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);
+        }
+
     }
 }

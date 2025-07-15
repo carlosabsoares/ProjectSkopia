@@ -1,6 +1,8 @@
 ﻿using Moq;
+using NuGet.Frameworks;
 using Project.Api.Application.Commands.AppProject;
 using Project.Api.Domain.Entities;
+using Project.Api.Domain.Enum;
 using Project.Api.Domain.Repositories;
 using Xunit;
 
@@ -31,7 +33,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             CreateAt = DateTime.Now.Date,
             IsActive = true,
             Name = "Name",
-            Role = Domain.Enum.RoleUserType.Manager,
+            Role = RoleUserType.Manager,
             Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
         };
 
@@ -46,6 +48,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.True(result.Success);
+            Assert.True((bool)result.Data);
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);
@@ -62,6 +65,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Equal("User not found or not active", result.Data.ToString());
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Never);
@@ -78,6 +82,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.False(result.Success);
+            Assert.Null(result.Data);
 
             _userRepositoryMock.Verify(x => x.GetByUuid(command.AuthorUuid), Times.Once);
             _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);

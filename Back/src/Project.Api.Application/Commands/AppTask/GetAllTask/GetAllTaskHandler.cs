@@ -9,12 +9,12 @@ namespace Project.Api.Application.Commands.AppTask
 {
     public class GetAllTaskHandler : Notifiable, IQueryHandler<GetAllTaskQuery>
     {
-        private readonly IProjectRepository _projectRepository;
+        private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
 
-        public GetAllTaskHandler(IProjectRepository projectRepository, IMapper mapper)
+        public GetAllTaskHandler(ITaskRepository taskRepository, IMapper mapper)
         {
-            _projectRepository = projectRepository;
+            _taskRepository = taskRepository;
             _mapper = mapper;
         }
 
@@ -22,7 +22,7 @@ namespace Project.Api.Application.Commands.AppTask
         {
             try
             {
-                var baseEntity = await _projectRepository.GetAll();
+                var baseEntity = await _taskRepository.GetAll();
 
                 var result = _mapper.Map<IEnumerable<TaskDto>>(baseEntity);
 
