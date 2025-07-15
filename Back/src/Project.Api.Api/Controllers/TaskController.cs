@@ -62,7 +62,7 @@ namespace Project.Api.Api.Controllers
 
         [HttpDelete()]
         [ProducesResponseType(typeof(bool), 200)]
-        public async Task<IActionResult> GetByUuidTasks(
+        public async Task<IActionResult> RemoveTasks(
         [FromQuery] RemoveTaskQuery query)
         {
             var result = await _mediator.Send(query);

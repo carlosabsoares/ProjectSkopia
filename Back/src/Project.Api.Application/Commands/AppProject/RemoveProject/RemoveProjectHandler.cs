@@ -1,19 +1,20 @@
-﻿using Flunt.Notifications;
+﻿using AutoMapper;
+using Flunt.Notifications;
 using Project.Api.Application.Configuration.Events;
 using Project.Api.Application.Configuration.Queries;
 using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppProject
 {
-    public class RemoveTaskHandler : Notifiable, IQueryHandler<RemoveProjectQuery>
+    public class RemoveProjectHandler : Notifiable, IQueryHandler<RemoveProjectQuery>
     {
         private IProjectRepository _projectRepository;
+        private readonly IMapper _mapper;
 
-        public RemoveTaskHandler(
-                IProjectRepository projectRepository
-            )
+        public RemoveProjectHandler(IProjectRepository projectRepository, IMapper mapper)
         {
             _projectRepository = projectRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEvent> Handle(RemoveProjectQuery request, CancellationToken cancellationToken)

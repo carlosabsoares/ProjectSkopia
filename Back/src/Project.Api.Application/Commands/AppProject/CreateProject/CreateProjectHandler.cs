@@ -6,12 +6,12 @@ using Project.Api.Domain.Repositories;
 
 namespace Project.Api.Application.Commands.AppProject
 {
-    public class CreateTaskHandler : Notifiable, ICommandHandler<CreateProjectCommand>
+    public class CreateProjectHandler : Notifiable, ICommandHandler<CreateProjectCommand>
     {
-        private IProjectRepository _projectRepository;
+        private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
 
-        public CreateTaskHandler(
+        public CreateProjectHandler(
                 IProjectRepository projectRepository,
                 IUserRepository userRepository
             )
@@ -43,7 +43,7 @@ namespace Project.Api.Application.Commands.AppProject
 
                 result = await _projectRepository.Add(entity);
 
-                return new ResultEvent(true, result ? result : null);
+                return new ResultEvent(result, result ? result : null);
             }
             catch (Exception ex)
             {

@@ -17,7 +17,7 @@ namespace Project.Api.Api.Controllers
 
         [HttpPost()]
         [ProducesResponseType(typeof(bool), 201)]
-        public async Task<IActionResult> PostCompany(
+        public async Task<IActionResult> PostProject(
             [FromBody] CreateProjectCommand command
         )
         {

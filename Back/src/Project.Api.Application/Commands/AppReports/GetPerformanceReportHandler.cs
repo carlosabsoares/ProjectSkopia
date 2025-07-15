@@ -26,6 +26,9 @@ namespace Project.Api.Application.Commands.AppReports
 
                 var baseEntity = await _taskRepository.GetPerformanceReport(days);
 
+                if (baseEntity == null || !baseEntity.Any())
+                    return new ResultEvent(true, new List<PerformanceReportsDto>());
+
                 var grouped = baseEntity
                     .GroupBy(t => t.AuthorId)
                     .Select(g => new

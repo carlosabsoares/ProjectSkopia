@@ -3,6 +3,6 @@
     public enum RoleUserType
     {
         User = 1,
-        Meneger = 2,
+        Manager = 2,
     }
 }

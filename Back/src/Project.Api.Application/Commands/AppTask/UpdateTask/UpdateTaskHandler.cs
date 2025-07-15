@@ -81,7 +81,7 @@ namespace Project.Api.Application.Commands.AppTask
                 task.ExpirationDate = request?.ExpirationDate == null ? task.ExpirationDate : request.ExpirationDate;
                 task.Status = request?.Status == null ? request.Status : task.Status;
 
-                await _projectRepository.Update(task);
+                await _taskRepository.Update(task);
 
                 await _taskRepository.CommitTransactionAsync();
 

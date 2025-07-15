@@ -71,7 +71,10 @@ namespace Project.Api.Application.Commands.AppTask
                     TaskId = task.Id
                 };
 
-                await _taskAuditRepository.Add(taskAuditEntity);
+                result = await _taskAuditRepository.Add(taskAuditEntity);
+
+                if (!result)
+                    return new ResultEvent(false, "Failed to create task audit record.");
 
                 task.Status = Domain.Enum.StatusTaskType.Removed;
 

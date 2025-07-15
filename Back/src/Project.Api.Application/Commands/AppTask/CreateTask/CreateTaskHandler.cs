@@ -9,7 +9,7 @@ namespace Project.Api.Application.Commands.AppTask
 {
     public class CreateTaskHandler : Notifiable, ICommandHandler<CreateTaskCommand>
     {
-        private ITaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
         private readonly ITaskAuditRepository _taskAuditRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
@@ -65,7 +65,7 @@ namespace Project.Api.Application.Commands.AppTask
                 if (!result)
                     return new ResultEvent(false, "Failed to create task");
 
-                return new ResultEvent(true, result ? result : null);
+                return new ResultEvent(result, result ? result : null);
             }
             catch (Exception ex)
             {
