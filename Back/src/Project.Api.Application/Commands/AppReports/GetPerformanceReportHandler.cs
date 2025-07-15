@@ -24,6 +24,14 @@ namespace Project.Api.Application.Commands.AppReports
             {
                 var days = 30;
 
+                var user = await _userRepository.GetByUuid(request.UserUuid);
+
+                if (user == null || user.IsActive == false)
+                    return new ResultEvent(false, "User not found.");
+
+                if (user.Role != Domain.Enum.RoleUserType.Manager)
+                    return new ResultEvent(false, "User does not have permission to access this report.");
+
                 var baseEntity = await _taskRepository.GetPerformanceReport(days);
 
                 if (baseEntity == null || !baseEntity.Any())

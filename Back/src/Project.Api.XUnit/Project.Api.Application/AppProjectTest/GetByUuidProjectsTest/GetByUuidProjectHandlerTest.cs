@@ -60,13 +60,16 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             _projectRepositoryMock.Setup(repo => repo.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(projectEntity);
             _mapperMock.Setup(m => m.Map<ProjectDto>(projectEntity)).Returns(projectDtos);
 
-            var query = new GetByUuidProjectQuery();
+            var query = new GetByUuidProjectQuery()
+            {
+                Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
+            };
 
             var result = await _handler.Handle(query, CancellationToken.None);
 
             Assert.True(result.Success);
 
-            _projectRepositoryMock.Verify(x => x.Add(It.IsAny<ProjectEntity>()), Times.Once);
+            _projectRepositoryMock.Verify(repo => repo.GetByUuid(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -79,7 +82,9 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             _projectRepositoryMock.Setup(repo => repo.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(projectEntities);
             _mapperMock.Setup(m => m.Map<ProjectDto>(projectEntities)).Returns(projectDtos);
 
-            var query = new GetByUuidProjectQuery();
+            var query = new GetByUuidProjectQuery() {
+                Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
+            };
 
             var result = await _handler.Handle(query, CancellationToken.None);
 

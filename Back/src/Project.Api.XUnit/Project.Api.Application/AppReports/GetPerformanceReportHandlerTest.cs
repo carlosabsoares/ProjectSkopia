@@ -33,6 +33,17 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
             }
         };
 
+        private UserEntity userNotManager = 
+            new UserEntity()
+            {
+                Id = 1,
+                CreateAt = DateTime.Now.Date,
+                IsActive = true,
+                Name = "Name",
+                Role = Domain.Enum.RoleUserType.User,
+                Uuid = Guid.Parse("cc393ae2-8227-4df7-9da5-fb996a2b9af7")
+        };
+
         private IList<TaskEntity> tasks = new List<TaskEntity>()
         {
             new TaskEntity()
@@ -69,19 +80,22 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
         {
             _userRepositoryMock.Setup(r => r.GetByIds(It.IsAny<List<long>>()))
                 .ReturnsAsync(user.ToList());
+            _userRepositoryMock.Setup(r => r.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(user.First);
             _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync(tasks);
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
             Assert.True(result.Success);
 
+            _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
             _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Once);
             _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Once);
         }
 
         [Fact]
-        public async Task Handle_ValidPerformanceReports_ShouldBeInvalid_UserNotFound()
+        public async Task Handle_ValidPerformanceReports_ShouldBeInvalid_UserNotManager()
         {
+            _userRepositoryMock.Setup(r => r.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(userNotManager);
             _userRepositoryMock.Setup(r => r.GetByIds(It.IsAny<List<long>>())).ReturnsAsync((List<UserEntity>)null);
             _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync(tasks);
 
@@ -89,13 +103,32 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
 
             Assert.False(result.Success);
 
-            _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Once);
-            _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Once);
+            _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
+            _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Never);
+            _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Never);
+        }
+
+
+        [Fact]
+        public async Task Handle_ValidPerformanceReports_ShouldBeInvalid_UserNotFound()
+        {
+            _userRepositoryMock.Setup(r => r.GetByUuid(It.IsAny<Guid>())).ReturnsAsync((UserEntity)null);
+            _userRepositoryMock.Setup(r => r.GetByIds(It.IsAny<List<long>>())).ReturnsAsync((List<UserEntity>)null);
+            _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync(tasks);
+
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            Assert.False(result.Success);
+
+            _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
+            _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Never);
+            _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Never);
         }
 
         [Fact]
         public async Task Handle_ValidPerformanceReports_ShouldBeInvalid_TaskNotFound()
         {
+            _userRepositoryMock.Setup(r => r.GetByUuid(It.IsAny<Guid>())).ReturnsAsync(user.First);
             _userRepositoryMock.Setup(r => r.GetByIds(It.IsAny<List<long>>())).ReturnsAsync((List<UserEntity>)null);
             _taskRepositoryMock.Setup(r => r.GetPerformanceReport(It.IsAny<int>())).ReturnsAsync((List<TaskEntity>)null);
 
@@ -103,6 +136,7 @@ namespace Project.Api.XUnit.Project.Api.Application.AppProject.CreateProject
 
             Assert.True(result.Success);
 
+            _userRepositoryMock.Verify(r => r.GetByUuid(It.IsAny<Guid>()), Times.Once);
             _userRepositoryMock.Verify(r => r.GetByIds(It.IsAny<List<long>>()), Times.Never);
             _taskRepositoryMock.Verify(r => r.GetPerformanceReport(It.IsAny<int>()), Times.Once);
         }
