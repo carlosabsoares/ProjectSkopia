@@ -30,21 +30,31 @@ Para a execução do serviço, basta executa-lo, pois irá aplicar a criação d
 
 	
 	Para execução no docker, basta executar o comando docker-compose up --build no diretório que o código foi baixado
+
+        Temos cadastrados 2 usuários com perfis diferentes:
+		* Manager - Carlos, com Uuid - 5cb61a7e-2c0b-41ca-a03b-18d01c0daa3f
+  		* User - Alberto, com Uuid - 6c4c7515-3030-4998-8541-a2a3b168ced4
+
+ 	Não estamos "espondo" os id's dos registros das tabelas, e sim o Uuid para aumentar a segurança
 	
 Refinamento:
 	
 	Visando melhorias futuras segue perguntas:
 	
 	* Qual seria a volumetria da utilização do sistema? ( visando alteração de arquitetura );
-	
-	
 
+ 	* Devemos utilizar JWT para validação da permissão de utilização das API's?
+	
 Final:
     Visando a manutenção de rastreabilidade do sistema, as deleções não são "físicas" e sim "lógicas", permitindo gerar relatórios mais completos para entendimento da evolução das informações.
 	
-	Se a volumetria de usuários for um número considerável, alterar o banco de dados para um banco mais potente, como Oracle ,Microsoft SQL Server ou Postgre. Possivel implementação de microserviços para podermos ganhar escalabilidade em volume de consumo da api e estrutura já preparada para a inclusão de um banco não relacional para a recuperação das informações de tasks pendentes para que a carga das telas de visualizações sejam mais rápidas ( possivel uso de MongoDB )
+	* Se a volumetria de usuários for um número considerável, alterar o banco de dados para um banco mais potente, como Oracle ,Microsoft SQL Server ou Postgre. Possivel implementação de microserviços para podermos ganhar escalabilidade em volume de consumo da api e estrutura já preparada para a inclusão de um banco não relacional para a recuperação das informações de tasks pendentes para que a carga das telas de visualizações sejam mais rápidas ( possivel uso de MongoDB )
 	
-	Além de gravar as ações de alteração das tasks, também deveriamos incluir log's de execução na api.
+	* Além de gravar as ações de alteração das tasks, também deveriamos incluir log's de execução na api.
+
+ 	* Com a inclusão de um JWT, não precisariamos mais informar nas chamadas das API's qual o Uuid do usuário. Essa informação viria dentro do JWT e com isso, validariamos o usuário e seu perfil internamente, evitando o recebimento de mais uma informação por parametro e aumentando a segurança da api;
+	
+ 	
 	
 
 	
